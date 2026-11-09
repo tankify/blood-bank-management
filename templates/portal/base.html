@@ -1,0 +1,10 @@
+{% load static %}<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f6f2"><title>{% block title %}LifeLink — Blood, when it matters{% endblock %}</title>
+<link rel="stylesheet" href="{% static 'portal/styles.css' %}"></head><body>
+<div class="demo-banner"><i></i> DEMO MODE · FICTIONAL SAMPLE DATA · SUBMISSIONS RESET WHEN SERVER RESTARTS</div>
+<header class="site-header"><a class="brand" href="{% url 'home' %}"><b>L</b> lifelink<span>.</span></a>
+<nav aria-label="Main navigation"><a href="{% url 'donors' %}">Donors</a><a href="{% url 'requests' %}">Requests</a><a href="{% url 'banks' %}">Blood banks</a><a href="{% url 'camps' %}">Camps</a><a href="{% url 'map_search' %}">Map search</a></nav>
+<div class="account">{% if user.is_authenticated %}<span>Hi, {{ user.username }}</span><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button>Sign out</button></form>{% else %}<a href="{% url 'login' %}">Sign in</a><a class="account-join" href="{% url 'register' %}">Join</a>{% endif %}</div></header>
+{% if messages %}<div class="messages">{% for message in messages %}<p>{{ message }}</p>{% endfor %}</div>{% endif %}
+<main>{% block content %}{% endblock %}</main><footer><a class="brand" href="{% url 'home' %}"><b>L</b> lifelink<span>.</span></a><p>Portfolio demonstration only. Not a live blood service or medical resource.</p><span>© 2026 LifeLink Demo</span></footer></body></html>

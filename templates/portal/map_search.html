@@ -1,0 +1,25 @@
+{% extends "portal/base.html" %}
+{% block title %}Map search — LifeLink{% endblock %}
+{% block content %}
+<section class="page-title"><label>AREA EXPLORER</label><h1>Map search.</h1><p>Choose a city to explore its general area and the fictional demo listings for that city.</p></section>
+<form class="filters map-filter" method="get">
+  <label>City<select name="city"><option value="">Choose a city</option>{% for value,label in cities %}<option value="{{ value }}" {% if city == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+  <div class="map-filter-note">The marker shows an approximate city centre.</div>
+  <button class="button dark" type="submit">Show area →</button>
+</form>
+{% if map_src %}
+<section class="map-layout">
+  <div class="map-frame"><iframe title="OpenStreetMap centered on {{ city }}" src="{{ map_src }}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+  <div class="map-attribution">Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a></div>
+  <div class="map-results">
+    <div><label>DEMO BLOOD CENTRES</label><strong>{{ banks|length }}</strong>{% for bank in banks %}<p>{{ bank.name }}<span>{{ bank.city }} · fictional sample</span></p>{% empty %}<p>No sample centres in this city.</p>{% endfor %}</div>
+    <div><label>DEMO DONATION CAMPS</label><strong>{{ camps|length }}</strong>{% for camp in camps %}<p>{{ camp.name }}<span>{{ camp.city }} · fictional sample</span></p>{% empty %}<p>No sample camps in this city.</p>{% endfor %}</div>
+  </div>
+  <p class="map-disclaimer">This map is for area browsing only. Demo centres and camps are fictional and are not real map pins or directions.</p>
+</section>
+{% elif city %}
+<p class="map-empty">There is no city-centre map configured for “{{ city }}”. Choose one of the listed cities.</p>
+{% else %}
+<p class="map-empty">Select a city above to load its approximate map area.</p>
+{% endif %}
+{% endblock %}

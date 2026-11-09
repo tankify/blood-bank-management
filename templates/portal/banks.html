@@ -1,0 +1,7 @@
+{% extends "portal/base.html" %}
+{% block title %}Blood centres — LifeLink{% endblock %}
+{% block content %}
+<section class="page-title"><label>DEMO DIRECTORY</label><h1>Blood centres.</h1><p>Fictional locations and inventory for exploring the app.</p></section>
+<form class="simple-search page-filter" method="get"><input type="search" name="q" value="{{ query }}" placeholder="Search a city or centre"><button class="button dark">Search →</button></form>
+<section class="cards">{% for bank in banks %}<article><div class="card-top"><b class="blood">{{ bank.demo_inventory_units }}</b><i class="demo">DEMO UNITS</i></div><h2>{{ bank.name }}</h2><p>{{ bank.city }}</p><small>{{ bank.address }} · fictional demo location</small></article>{% empty %}<p class="empty">No sample centres found.</p>{% endfor %}</section>
+{% endblock %}

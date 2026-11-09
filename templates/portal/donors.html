@@ -1,0 +1,5 @@
+{% extends "portal/base.html" %}{% block title %}Find donors — LifeLink{% endblock %}{% block content %}
+<section class="page-title"><label>COMMUNITY DIRECTORY</label><h1>Find a donor.</h1><p>Search fictional demo records by blood group and city.</p></section>
+<form class="filters page-filter"><label>Blood group<select name="group"><option value="">All groups</option>{% for value,label in blood_groups %}<option value="{{ value }}" {% if filters.group == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label><label>City<select name="city"><option value="">All cities</option>{% for value,label in cities %}<option value="{{ value }}" {% if filters.city == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label><button class="button dark">Apply filters →</button></form>
+<section class="cards">{% for donor in donors %}<article><div class="card-top"><b class="blood">{{ donor.blood_group }}</b><i>● Available</i></div><h2>{{ donor.name }}</h2><p>{{ donor.city }}</p><small>Contact details hidden in demo</small></article>{% empty %}<p class="empty">No demo donors match those filters.</p>{% endfor %}</section>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "portal/base.html" %}
+{% block title %}Donation camps — LifeLink{% endblock %}
+{% block content %}
+<section class="page-title"><label>DEMO DIRECTORY</label><h1>Donation camps.</h1><p>Fictional camp information for exploring the app.</p></section>
+<form class="simple-search page-filter" method="get"><input type="search" name="q" value="{{ query }}" placeholder="Search a city or camp"><button class="button dark">Search →</button></form>
+<section class="cards">{% for camp in camps %}<article><div class="card-top"><b class="blood">+</b><i class="demo">DEMO EVENT</i></div><h2>{{ camp.name }}</h2><p>{{ camp.city }}{% if camp.event_date %} · {{ camp.event_date }}{% endif %}</p><small>{{ camp.address }} · fictional demo location</small></article>{% empty %}<p class="empty">No sample camps found.</p>{% endfor %}</section>
+{% endblock %}
