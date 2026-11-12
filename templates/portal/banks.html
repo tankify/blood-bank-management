@@ -1,7 +1,9 @@
 {% extends "portal/base.html" %}
 {% block title %}Blood centres — LifeLink{% endblock %}
 {% block content %}
-<section class="page-title"><label>DEMO DIRECTORY</label><h1>Blood centres.</h1><p>Fictional locations and inventory for exploring the app.</p></section>
-<form class="simple-search page-filter" method="get"><input type="search" name="q" value="{{ query }}" placeholder="Search a city or centre"><button class="button dark">Search →</button></form>
-<section class="cards">{% for bank in banks %}<article><div class="card-top"><b class="blood">{{ bank.demo_inventory_units }}</b><i class="demo">DEMO UNITS</i></div><h2>{{ bank.name }}</h2><p>{{ bank.city }}</p><small>{{ bank.address }} · fictional demo location</small></article>{% empty %}<p class="empty">No sample centres found.</p>{% endfor %}</section>
+<section class="page-hero page-hero-directory"><div class="eyebrow"><span class="eyebrow-pulse"></span> LOCAL RESOURCES</div><h1>A place to turn<br><em>for a little help.</em></h1><p>Explore fictional blood centre entries. Inventory numbers are illustrative only, not live availability.</p></section>
+<form class="directory-filter directory-filter-search" method="get"><label class="search-wide"><small>SEARCH CENTRE OR CITY</small><input type="search" name="q" value="{{ query }}" placeholder="Try a centre name or city"></label><button class="button button-dark" type="submit">Search centres <span>↗</span></button></form>
+<section class="directory-section"><div class="resource-grid">{% for bank in banks %}
+  <article class="resource-card"><div class="resource-icon">✚</div><div class="resource-topline"><span class="resource-kicker">DEMO CENTRE</span><span class="resource-city">{{ bank.city }}</span></div><h2>{{ bank.name }}</h2><p>{{ bank.address }}</p><div class="inventory-panel"><span><small>ILLUSTRATIVE INVENTORY</small><b>{{ bank.demo_inventory_units }} <i>units</i></b></span><span class="inventory-mark">✳</span></div><a class="resource-link" href="{% url 'map_search' %}?city={{ bank.city|urlencode }}">Explore this area <span>↗</span></a></article>
+{% empty %}<div class="empty-panel"><span class="empty-icon">⌕</span><h2>No centres found.</h2><p>Try searching another city or centre name.</p><a href="{% url 'banks' %}">Clear search ↗</a></div>{% endfor %}</div></section>
 {% endblock %}

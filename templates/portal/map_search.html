@@ -1,25 +1,27 @@
 {% extends "portal/base.html" %}
-{% block title %}Map search — LifeLink{% endblock %}
+{% block title %}Explore the map — LifeLink{% endblock %}
 {% block content %}
-<section class="page-title"><label>AREA EXPLORER</label><h1>Map search.</h1><p>Choose a city to explore its general area and the fictional demo listings for that city.</p></section>
-<form class="filters map-filter" method="get">
-  <label>City<select name="city"><option value="">Choose a city</option>{% for value,label in cities %}<option value="{{ value }}" {% if city == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
-  <div class="map-filter-note">The marker shows an approximate city centre.</div>
-  <button class="button dark" type="submit">Show area →</button>
+<section class="page-hero page-hero-directory"><div class="eyebrow"><span class="eyebrow-pulse"></span> AROUND THE COMMUNITY</div><h1>Start with a place.<br><em>Find your way.</em></h1><p>Explore an approximate city area and browse fictional centres and camps listed in that city.</p></section>
+<form class="directory-filter map-filter" method="get">
+  <label><small>CHOOSE A CITY</small><select name="city"><option value="">Choose a city</option>{% for value,label in cities %}<option value="{{ value }}" {% if city == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+  <div class="map-filter-note">Maps are centred on the city, not on a facility.</div>
+  <button class="button button-dark" type="submit">Explore area <span>↗</span></button>
 </form>
 {% if map_src %}
-<section class="map-layout">
-  <div class="map-frame"><iframe title="OpenStreetMap centered on {{ city }}" src="{{ map_src }}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
-  <div class="map-attribution">Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a></div>
-  <div class="map-results">
-    <div><label>DEMO BLOOD CENTRES</label><strong>{{ banks|length }}</strong>{% for bank in banks %}<p>{{ bank.name }}<span>{{ bank.city }} · fictional sample</span></p>{% empty %}<p>No sample centres in this city.</p>{% endfor %}</div>
-    <div><label>DEMO DONATION CAMPS</label><strong>{{ camps|length }}</strong>{% for camp in camps %}<p>{{ camp.name }}<span>{{ camp.city }} · fictional sample</span></p>{% empty %}<p>No sample camps in this city.</p>{% endfor %}</div>
+<section class="map-section">
+  <div class="map-shell"><div class="map-shell-top"><span><i></i> AREA VIEW</span><b>{{ city }}</b></div><div class="map-frame"><iframe title="OpenStreetMap area near {{ city }}" src="{{ map_src }}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div class="map-attribution">Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a></div></div>
+  <div class="map-side">
+    <div class="map-side-head"><div class="eyebrow eyebrow-muted"><span class="eyebrow-dash"></span> IN THIS AREA</div><h2>Community<br>resources.</h2></div>
+    <div class="map-list"><span class="map-list-icon">✚</span><span><b>Blood centres</b><small>{{ banks|length }} fictional listing{{ banks|length|pluralize }}</small></span><a href="{% url 'banks' %}?q={{ city|urlencode }}" aria-label="View blood centres in {{ city }}">↗</a></div>
+    {% for bank in banks %}<div class="map-place"><b>{{ bank.name }}</b><span>{{ bank.address }}</span></div>{% empty %}<p class="map-empty-inline">No sample centres in this city.</p>{% endfor %}
+    <div class="map-list map-list-camp"><span class="map-list-icon">✳</span><span><b>Donation camps</b><small>{{ camps|length }} fictional listing{{ camps|length|pluralize }}</small></span><a href="{% url 'camps' %}?q={{ city|urlencode }}" aria-label="View donation camps in {{ city }}">↗</a></div>
+    {% for camp in camps %}<div class="map-place"><b>{{ camp.name }}</b><span>{{ camp.address }}</span></div>{% empty %}<p class="map-empty-inline">No sample camps in this city.</p>{% endfor %}
   </div>
-  <p class="map-disclaimer">This map is for area browsing only. Demo centres and camps are fictional and are not real map pins or directions.</p>
 </section>
+<p class="map-disclaimer"><span>ⓘ</span> City-centre marker only. Demo locations are fictional, aren’t pinned to the map, and shouldn’t be used for directions or real-world blood services.</p>
 {% elif city %}
-<p class="map-empty">There is no city-centre map configured for “{{ city }}”. Choose one of the listed cities.</p>
+<p class="map-empty">There’s no area map configured for that selection. Choose a listed city instead.</p>
 {% else %}
-<p class="map-empty">Select a city above to load its approximate map area.</p>
+<div class="map-empty map-empty-start"><span class="map-empty-icon">⌖</span><h2>Your next connection could be close by.</h2><p>Choose a city above to see the approximate area and its sample community listings.</p></div>
 {% endif %}
 {% endblock %}

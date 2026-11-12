@@ -1,10 +1,57 @@
-{% load static %}<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f7f6f2"><title>{% block title %}LifeLink — Blood, when it matters{% endblock %}</title>
-<link rel="stylesheet" href="{% static 'portal/styles.css' %}"></head><body>
-<div class="demo-banner"><i></i> DEMO MODE · FICTIONAL SAMPLE DATA · SUBMISSIONS RESET WHEN SERVER RESTARTS</div>
-<header class="site-header"><a class="brand" href="{% url 'home' %}"><b>L</b> lifelink<span>.</span></a>
-<nav aria-label="Main navigation"><a href="{% url 'donors' %}">Donors</a><a href="{% url 'requests' %}">Requests</a><a href="{% url 'banks' %}">Blood banks</a><a href="{% url 'camps' %}">Camps</a><a href="{% url 'map_search' %}">Map search</a></nav>
-<div class="account">{% if user.is_authenticated %}<span>Hi, {{ user.username }}</span><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button>Sign out</button></form>{% else %}<a href="{% url 'login' %}">Sign in</a><a class="account-join" href="{% url 'register' %}">Join</a>{% endif %}</div></header>
-{% if messages %}<div class="messages">{% for message in messages %}<p>{{ message }}</p>{% endfor %}</div>{% endif %}
-<main>{% block content %}{% endblock %}</main><footer><a class="brand" href="{% url 'home' %}"><b>L</b> lifelink<span>.</span></a><p>Portfolio demonstration only. Not a live blood service or medical resource.</p><span>© 2026 LifeLink Demo</span></footer></body></html>
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbf8f6">
+  <title>{% block title %}LifeLink — A little hope goes a long way{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'portal/styles.css' %}">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="demo-ribbon">
+    <span class="ribbon-status"><i></i> INTERACTIVE DEMO</span>
+    <span class="ribbon-copy">Fictional sample data · all submissions reset when the server stops</span>
+  </div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="{% url 'home' %}" aria-label="LifeLink home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>life<span class="brand-light">link</span><b>.</b></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="{% if request.resolver_match.url_name == 'donors' %}is-active{% endif %}" href="{% url 'donors' %}">Find donors</a>
+        <a class="{% if request.resolver_match.url_name == 'requests' %}is-active{% endif %}" href="{% url 'requests' %}">Requests</a>
+        <a class="{% if request.resolver_match.url_name == 'banks' %}is-active{% endif %}" href="{% url 'banks' %}">Blood centres</a>
+        <a class="{% if request.resolver_match.url_name == 'camps' %}is-active{% endif %}" href="{% url 'camps' %}">Camps</a>
+        <a class="{% if request.resolver_match.url_name == 'map_search' %}is-active{% endif %}" href="{% url 'map_search' %}">Explore map</a>
+      </nav>
+      <div class="header-account">
+        {% if user.is_authenticated %}
+          <span class="account-greeting">Hi, {{ user.username }}</span>
+          <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="button button-quiet button-compact" type="submit">Sign out</button></form>
+        {% else %}
+          <a class="account-login" href="{% url 'login' %}">Sign in</a>
+          <a class="button button-dark button-compact" href="{% url 'register' %}">Create account <span aria-hidden="true">↗</span></a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+  {% if messages %}
+    <div class="message-wrap">{% for message in messages %}<div class="message message-{{ message.tags }}"><span aria-hidden="true">✦</span>{{ message }}</div>{% endfor %}</div>
+  {% endif %}
+  <main id="main-content">{% block content %}{% endblock %}</main>
+  <footer class="site-footer">
+    <div class="footer-main">
+      <a class="brand brand-footer" href="{% url 'home' %}"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>life<span class="brand-light">link</span><b>.</b></span></a>
+      <p>Small acts of care can make a world of difference.</p>
+      <span class="footer-demo">A portfolio demo · not a live blood service</span>
+    </div>
+    <div class="footer-bottom"><span>© 2026 LifeLink</span><span>Fictional records only · Please don’t enter real health or contact information.</span></div>
+  </footer>
+</body>
+</html>

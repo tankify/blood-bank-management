@@ -1,4 +1,15 @@
-{% extends "portal/base.html" %}{% block title %}{{ title }} — LifeLink{% endblock %}{% block content %}
-<section class="form-layout"><div class="form-intro"><label>{{ eyebrow }}</label><h1>{{ title }}.</h1><p>This demo uses temporary in-memory storage. Accounts and submissions disappear when the server stops. Use fictional details only.</p></div>
-<form class="form-card" method="post">{% csrf_token %}{% if form.non_field_errors %}<div class="errors">{{ form.non_field_errors }}</div>{% endif %}{% for field in form %}<div class="field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<small class="errors">{{ error }}</small>{% endfor %}</div>{% endfor %}<button class="button primary full">{{ submit_label }} →</button><small class="form-note">Do not enter real contact or health information.</small></form></section>
+{% extends "portal/base.html" %}
+{% block title %}{{ title }} — LifeLink{% endblock %}
+{% block content %}
+<section class="form-page">
+  <div class="form-story"><div class="eyebrow eyebrow-light"><span class="eyebrow-dash"></span>{{ eyebrow }}</div><h1>{{ title }}<br><em>starts here.</em></h1><p>Small steps can make a meaningful difference. This demo lets you explore the flow with fictional information only.</p><div class="form-story-note"><span>♥</span><span><b>Kindness looks good on everyone.</b><small>Demo accounts and submissions are temporary.</small></span></div><div class="form-story-orbit"></div></div>
+  <div class="form-content"><div class="form-content-head"><span class="form-step">LIFELINK / COMMUNITY</span><span class="form-mark">✳</span></div>
+    <form class="form-card" method="post">{% csrf_token %}
+      {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+      {% for field in form %}<div class="form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<small class="form-help">{{ field.help_text|safe }}</small>{% endif %}{% for error in field.errors %}<small class="form-error">{{ error }}</small>{% endfor %}</div>{% endfor %}
+      <button class="button button-primary form-submit" type="submit">{{ submit_label }} <span aria-hidden="true">↗</span></button>
+      <p class="form-consent"><span>ⓘ</span> Please don’t enter real contact or health information.</p>
+    </form>
+  </div>
+</section>
 {% endblock %}

@@ -1,3 +1,17 @@
-{% extends "portal/base.html" %}{% block title %}Sign in — LifeLink{% endblock %}{% block content %}
-<section class="form-layout"><div class="form-intro"><label>DEMO ACCOUNT</label><h1>Welcome<br>back.</h1><p>Sign in to try the donor and request forms. Account data is temporary and resets with the server.</p></div><form class="form-card" method="post">{% csrf_token %}{% if form.non_field_errors %}<div class="errors">{{ form.non_field_errors }}</div>{% endif %}{% for field in form %}<div class="field"><label for="{{ field.id_for_label }}">{{ field.label }}</label><input class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" type="{{ field.field.widget.input_type }}">{% for error in field.errors %}<small class="errors">{{ error }}</small>{% endfor %}</div>{% endfor %}<input type="hidden" name="next" value="{{ next }}"><button class="button primary full">Sign in →</button><small class="form-note">For demo use only. Do not reuse a real password.</small></form></section>
+{% extends "portal/base.html" %}
+{% block title %}Sign in — LifeLink{% endblock %}
+{% block content %}
+<section class="form-page">
+  <div class="form-story"><div class="eyebrow eyebrow-light"><span class="eyebrow-dash"></span> YOUR LIFE LINK</div><h1>Good to see<br><em>you again.</em></h1><p>Sign in to explore donor and request forms. Your demo account stays only as long as this server is running.</p><div class="form-story-note"><span>♥</span><span><b>Every act of care counts.</b><small>Demo accounts reset when the server stops.</small></span></div><div class="form-story-orbit"></div></div>
+  <div class="form-content"><div class="form-content-head"><span class="form-step">WELCOME BACK</span><span class="form-mark">✳</span></div>
+    <form class="form-card" method="post">{% csrf_token %}
+      {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+      {% for field in form %}<div class="form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label><input class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" type="{{ field.field.widget.input_type }}" autocomplete="{% if field.name == 'username' %}username{% else %}current-password{% endif %}" {% if field.name == 'username' %}autofocus{% endif %}>{% for error in field.errors %}<small class="form-error">{{ error }}</small>{% endfor %}</div>{% endfor %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <button class="button button-primary form-submit" type="submit">Sign in <span aria-hidden="true">↗</span></button>
+      <p class="form-consent"><span>ⓘ</span> For demo use only. Don’t reuse a real password.</p>
+    </form>
+    <p class="form-alternate">New to LifeLink? <a href="{% url 'register' %}">Create a demo account ↗</a></p>
+  </div>
+</section>
 {% endblock %}

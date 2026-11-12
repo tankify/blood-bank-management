@@ -1,10 +1,89 @@
-{% extends "portal/base.html" %}{% block content %}
-<section class="hero"><div><div class="eyebrow">CONNECTING PEOPLE · SAVING TIME</div><h1>Blood, when<br>it <em>matters.</em></h1><p class="lede">Find a matching donor, share a request, or discover a nearby blood centre. Explore the experience with fictional sample data.</p>
-<div class="actions"><a class="button primary" href="{% url 'donors' %}">Find a donor <b>↗</b></a><a class="text-link" href="{% url 'create_request' %}">I need blood →</a></div><small>✓ &nbsp; A simple way to bring communities closer</small></div>
-<div class="hero-art"><div class="orbit"></div><div class="drop"></div><b class="plus">+</b><div class="art-label">ONE DONATION<br><strong>CAN HELP SAVE LIVES</strong></div><span class="art-count">01 / 04</span></div></section>
-<section class="stats"><div><b>{{ donor_count }}</b><span>available donors</span></div><div><b>{{ request_count }}</b><span>open requests</span></div><div><b>{{ bank_count }}</b><span>blood centres</span></div><p>Sample data only<br><strong>not live inventory</strong></p></section>
-<section class="content"><div class="section-head"><div><label>QUICK SEARCH</label><h2>Find a match<br>near you.</h2></div><p>Filter the sample donor directory by blood group and city.</p></div>
-<form class="filters" action="{% url 'donors' %}"><label>Blood group<select name="group"><option value="">All groups</option>{% for value,label in blood_groups %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></label><label>City<select name="city"><option value="">All cities</option>{% for value,label in cities %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></label><button class="button dark">Search donors →</button></form></section>
-<section class="content activity"><div class="section-head"><div><label>COMMUNITY BOARD</label><h2>Latest activity.</h2></div><a class="text-link" href="{% url 'requests' %}">All requests →</a></div><div class="columns"><div><h3>✳ Available donors</h3>{% for donor in donors %}<article><b class="blood">{{ donor.blood_group }}</b><span><strong>{{ donor.name }}</strong><small>{{ donor.city }} · contact hidden</small></span><i>Available</i></article>{% empty %}<p class="empty">No sample donors.</p>{% endfor %}</div><div><h3>↗ Blood requests</h3>{% for item in requests %}<article><b class="blood">{{ item.blood_group }}</b><span><strong>{{ item.requester_name }}</strong><small>{{ item.city }} · {{ item.units_needed }} unit{{ item.units_needed|pluralize }}</small></span><i>Demo</i></article>{% empty %}<p class="empty">No sample requests.</p>{% endfor %}</div></div></section>
-<section class="callout"><div><label>BE SOMEONE'S GOOD NEWS</label><h2>Ready to make<br>a difference?</h2></div><a class="button light" href="{% url 'register_donor' %}">Join as a donor ↗</a></section>
+{% extends "portal/base.html" %}
+{% block title %}LifeLink — A little hope goes a long way{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow"><span class="eyebrow-pulse"></span> PEOPLE HELPING PEOPLE</div>
+    <h1>Make a little<br>room for <em>hope.</em></h1>
+    <p class="hero-lede">When someone needs blood, finding the right connection matters. LifeLink brings donors, requests and local resources into one caring community.</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="{% url 'donors' %}">Find a donor <span aria-hidden="true">↗</span></a>
+      <a class="hero-secondary" href="{% url 'create_request' %}"><span class="secondary-icon">+</span> I need blood</a>
+    </div>
+    <div class="hero-foot">
+      <div class="avatar-stack" aria-hidden="true"><i>A</i><i>R</i><i>M</i><b>+</b></div>
+      <span>Every connection starts with someone who cares.</span>
+    </div>
+  </div>
+  <div class="hero-art" aria-label="Illustration of a drop of blood">
+    <div class="art-grid"></div>
+    <div class="art-ring art-ring-one"></div><div class="art-ring art-ring-two"></div>
+    <div class="art-drop"><span></span></div>
+    <div class="art-spark spark-one">✳</div><div class="art-spark spark-two">✳</div>
+    <div class="art-label-card"><span class="art-label-icon">♥</span><span><b>Give a little.</b><small>Help someone keep going.</small></span></div>
+    <div class="art-sticker">CARE<br>IN ACTION</div>
+    <div class="art-caption">ONE COMMUNITY<br><strong>COUNTLESS WAYS TO HELP</strong></div>
+  </div>
+  <div class="hero-side-note">01 <span>—</span> COMMUNITY</div>
+</section>
+
+<section class="impact-strip" aria-label="Demo data">
+  <div class="impact-intro"><span class="impact-dot"></span><span>THE COMMUNITY<br><b>AT A GLANCE</b></span></div>
+  <div class="impact-stat"><strong>{{ donor_count|stringformat:"02d" }}</strong><span>available donors</span></div>
+  <div class="impact-stat"><strong>{{ request_count|stringformat:"02d" }}</strong><span>open requests</span></div>
+  <div class="impact-stat"><strong>{{ bank_count|stringformat:"02d" }}</strong><span>blood centres</span></div>
+  <div class="impact-note"><span>✳</span><p>Sample data for exploring the app.<br><b>Not live inventory.</b></p></div>
+</section>
+
+<section class="section section-match">
+  <div class="section-heading">
+    <div><div class="eyebrow eyebrow-muted"><span class="eyebrow-dash"></span> START WITH A MATCH</div><h2>A small search.<br><em>A big difference.</em></h2></div>
+    <p>Choose a blood group and city to explore fictional donor profiles. Contact details stay private in this demo.</p>
+  </div>
+  <form class="search-panel" method="get" action="{% url 'donors' %}">
+    <label class="search-field"><span class="field-icon">◉</span><span><small>LOOKING FOR</small><select name="group"><option value="">Any blood group</option>{% for value,label in blood_groups %}<option value="{{ value }}" {% if filters.group == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></span></label>
+    <span class="search-divider"></span>
+    <label class="search-field"><span class="field-icon field-pin">⌖</span><span><small>IN THE AREA</small><select name="city"><option value="">Any city</option>{% for value,label in cities %}<option value="{{ value }}" {% if filters.city == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></span></label>
+    <button class="button button-dark search-submit" type="submit">Explore donors <span aria-hidden="true">↗</span></button>
+  </form>
+</section>
+
+<section class="section section-flow">
+  <div class="section-heading section-heading-tight">
+    <div><div class="eyebrow eyebrow-muted"><span class="eyebrow-dash"></span> HOW LIFELINK WORKS</div><h2>One good thing<br>leads to another.</h2></div>
+    <a class="text-link" href="{% url 'map_search' %}">Explore the city map <span>↗</span></a>
+  </div>
+  <div class="flow-grid">
+    <article class="flow-card"><span class="flow-number">01</span><div class="flow-icon flow-icon-rose">⌕</div><h3>Find your people</h3><p>Search sample donors and requests by blood group and city.</p><a href="{% url 'donors' %}" aria-label="Browse donors">Browse donors <span>↗</span></a></article>
+    <article class="flow-card flow-card-featured"><span class="flow-number">02</span><div class="flow-icon flow-icon-cream">＋</div><h3>Raise your hand</h3><p>Try the donor or request form and see the community board update.</p><a href="{% url 'register_donor' %}" aria-label="Become a donor">Become a donor <span>↗</span></a></article>
+    <article class="flow-card"><span class="flow-number">03</span><div class="flow-icon flow-icon-gold">⌖</div><h3>Explore nearby</h3><p>Browse fictional centres and camps across the demo cities.</p><a href="{% url 'banks' %}" aria-label="Explore local resources">Explore resources <span>↗</span></a></article>
+  </div>
+</section>
+
+<section class="section section-board">
+  <div class="section-heading section-heading-tight">
+    <div><div class="eyebrow eyebrow-muted"><span class="eyebrow-dash"></span> COMMUNITY BOARD</div><h2>Care is already<br>in motion.</h2></div>
+    <a class="text-link" href="{% url 'requests' %}">View all requests <span>↗</span></a>
+  </div>
+  <div class="board-grid">
+    <div class="board-column">
+      <div class="board-title"><span class="board-title-icon">♥</span><span><b>Ready to help</b><small>Available demo donors</small></span></div>
+      {% for donor in donors %}
+      <article class="person-row"><span class="blood-chip">{{ donor.blood_group }}</span><span class="person-detail"><b>{{ donor.name }}</b><small>{{ donor.city }} · details hidden</small></span><span class="status-pill"><i></i> Available</span></article>
+      {% empty %}<p class="empty-state">No sample donors match your search. Try another filter.</p>{% endfor %}
+    </div>
+    <div class="board-column">
+      <div class="board-title"><span class="board-title-icon board-icon-request">↗</span><span><b>Looking for help</b><small>Open demo requests</small></span></div>
+      {% for item in requests %}
+      <article class="person-row"><span class="blood-chip">{{ item.blood_group }}</span><span class="person-detail"><b>{{ item.requester_name }}</b><small>{{ item.city }} · {{ item.units_needed }} unit{{ item.units_needed|pluralize }}</small></span><span class="request-tag">DEMO</span></article>
+      {% empty %}<p class="empty-state">No sample requests match your search.</p>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="closing-cta">
+  <div class="cta-orb cta-orb-one"></div><div class="cta-orb cta-orb-two"></div>
+  <div class="cta-content"><div class="eyebrow eyebrow-light"><span class="eyebrow-dash"></span> YOUR NEXT CHAPTER STARTS HERE</div><h2>Maybe today,<br>you’re someone’s <em>hope.</em></h2></div>
+  <a class="button button-cream" href="{% url 'register_donor' %}">Join the community <span aria-hidden="true">↗</span></a>
+</section>
 {% endblock %}

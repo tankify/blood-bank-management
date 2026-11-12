@@ -1,7 +1,9 @@
 {% extends "portal/base.html" %}
 {% block title %}Donation camps — LifeLink{% endblock %}
 {% block content %}
-<section class="page-title"><label>DEMO DIRECTORY</label><h1>Donation camps.</h1><p>Fictional camp information for exploring the app.</p></section>
-<form class="simple-search page-filter" method="get"><input type="search" name="q" value="{{ query }}" placeholder="Search a city or camp"><button class="button dark">Search →</button></form>
-<section class="cards">{% for camp in camps %}<article><div class="card-top"><b class="blood">+</b><i class="demo">DEMO EVENT</i></div><h2>{{ camp.name }}</h2><p>{{ camp.city }}{% if camp.event_date %} · {{ camp.event_date }}{% endif %}</p><small>{{ camp.address }} · fictional demo location</small></article>{% empty %}<p class="empty">No sample camps found.</p>{% endfor %}</section>
+<section class="page-hero page-hero-directory"><div class="eyebrow"><span class="eyebrow-pulse eyebrow-gold"></span> SHOW UP FOR SOMEONE</div><h1>Good things<br><em>happen together.</em></h1><p>Discover fictional donation camp listings and explore their demo city areas.</p></section>
+<form class="directory-filter directory-filter-search" method="get"><label class="search-wide"><small>SEARCH CAMP OR CITY</small><input type="search" name="q" value="{{ query }}" placeholder="Try a camp name or city"></label><button class="button button-dark" type="submit">Search camps <span>↗</span></button></form>
+<section class="directory-section"><div class="resource-grid">{% for camp in camps %}
+  <article class="resource-card camp-card"><div class="resource-icon resource-icon-camp">✳</div><div class="resource-topline"><span class="resource-kicker">COMMUNITY EVENT</span><span class="resource-city">{{ camp.city }}</span></div><h2>{{ camp.name }}</h2><p>{{ camp.address }}</p><div class="camp-date"><span>⌖</span><span>{{ camp.city }}{% if camp.event_date %}<small>{{ camp.event_date }}</small>{% else %}<small>Demo date not set</small>{% endif %}</span></div><a class="resource-link" href="{% url 'map_search' %}?city={{ camp.city|urlencode }}">Explore this area <span>↗</span></a></article>
+{% empty %}<div class="empty-panel"><span class="empty-icon">✳</span><h2>No camps found.</h2><p>Try searching another city or camp name.</p><a href="{% url 'camps' %}">Clear search ↗</a></div>{% endfor %}</div></section>
 {% endblock %}
